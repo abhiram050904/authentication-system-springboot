@@ -1,5 +1,6 @@
 package in.abhiram.authentication.response;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,4 +16,7 @@ public class ProfileResponse {
     private String username;
     private String email;
     private boolean isVerified;
+    
+    @JsonIgnore // Don't serialize OTP in JSON responses
+    private String otp;
 }

@@ -18,7 +18,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
-
 import in.abhiram.authentication.filter.JwtRequestFilter;
 import in.abhiram.authentication.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
@@ -35,11 +34,19 @@ public class SecurityConfig {
     private final JwtRequestFilter jwtRequestFilter;
 
 
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception { 
         http.cors(Customizer.withDefaults())
             .csrf(AbstractHttpConfigurer::disable)
-            .authorizeHttpRequests(auth->auth.requestMatchers("/profile/register", "/profile/login", "/profile/send-reset-otp", "/profile/send-password-reset").permitAll().anyRequest().authenticated())
+            .authorizeHttpRequests(auth->auth.requestMatchers(
+                "/profile/register", 
+                "/profile/login", 
+                "/profile/verify-otp",
+                "/profile/forgot-password", 
+                "/profile/verify-reset-otp", 
+                "/profile/reset-password"
+            ).permitAll().anyRequest().authenticated())
             .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .logout(AbstractHttpConfigurer::disable)
             .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
